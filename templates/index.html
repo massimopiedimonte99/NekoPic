@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <meta name="description" content="Ottieni le immagini sui tuoi anime preferiti">
+ <meta name="author" content="Massimo Piedimonte">
+ <title>Nekopic</title>
+ <link rel="icon" href="static/favicon.ico" />
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+ <link href="static/style.css" rel="stylesheet">
+</head>
+<body>
+
+    <header class="header">
+        <h1 class="heading"><img src="static/favicon.ico" alt="NekoPic" class="sub-icon">NekoPic</h1>
+    </header>
+    <div class="container" style="max-width: 600px;">
+        <form class="form-signin" action="/" method="POST" role="search">
+            <div class="form-group">
+                <input type="search" name="search" class="form-control" id="anime-name" placeholder="Eg. Tokyo Ghoul" required>
+            </div>
+            <button type="submit" class="btn btn-lg btn-primary btn-block" type="button">Search</button>
+        </form>
+    </div>
+
+    <div class="container anime-list-container">
+        <!-- Preload -->
+        <img src="https://data.whicdn.com/images/176356117/original.gif" style="display: none;">
+        <img src="https://cdn.dribbble.com/users/4221/screenshots/2847133/loading.gif" alt="Sto caricando le informazioni..." class="loading-img">
+        
+        <p class="not-found">Quest'anime non è disponibile.</p>
+        <section class="nekopics">
+        </section>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script>
+        
+        // From: https://stackoverflow.com/questions/4878756/how-to-capitalize-first-letter-of-each-word-like-a-2-word-city
+        function toTitleCase(str) {
+            return str.replace(/\w\S*/g, function(txt){
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            });
+        }
+
+        $(function() {
+            $('.form-signin').submit(function(e) {
+                // Set loader
+                $(".loading-img").attr("src", "https://cdn.dribbble.com/users/4221/screenshots/2847133/loading.gif");
+                // Hide "p.not-found" message
+                $(".not-found").css("display", "none");
+                // Hide "p.no-info" message
+                $(".no-info").css("display", "none");
+                // Empty author credits
+                $(".author").css("display", "none");
+                // Empty ".nekopics"
+                $(".nekopics").empty();
+                // Show loading
+                $(".loading-img").css("display", "block");
+
+                e.preventDefault();
+                animeName = $('#anime-name').val();
+
+                $.ajax({
+                    url: "/getInfo",
+                    type: "POST",
+                    data: {'anime_name': animeName},
+                    success: function(data) {
+                        data = JSON.parse(data)
+                        if(data.imgs.length > 0) {
+                            for(let i in data.imgs) {
+                                $(".loading-img").css("display", "none");
+                                document.querySelector(".nekopics").innerHTML += '<a href="'+data.imgs[i]+'"><img src="'+data.imgs[i]+'" class="nekopic img-thumbnail" /></a>';
+                            }
+                        }
+                    },
+                    error: function(error) {
+                        $(".loading-img").attr("src", "https://data.whicdn.com/images/176356117/original.gif");
+                        $(".not-found").css("display", "block");
+                    }
+                });
+            });
+        });
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+.container {
+    margin-top: 30px;
+}
+
+.js-refLink {
+    display: block;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.author {
+    display: block;
+    text-align: center;
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    opacity: .4;
+}
+
+.loading-img {
+    width: 350px;
+    margin: 0 auto;
+    display: none;
+}
+
+.not-found,
+.no-info {
+    font-size: 20px;
+    text-align: center;
+    opacity: .6;
+    display: none;
+}
+
+.nekopics {
+    text-align: center;
+}
+
+.nekopic {
+    display: inline-block;
+    width: 250px;
+    margin: 5px;
+}
+
+.header {
+    opacity: .5;
+    padding: 20px 20px 0 20px;
+}
+
+.header .heading {
+    margin-bottom: 20px;
+    font-size: 30pt;
+}
+
+.header .sub-icon {
+    width: 80px;
+}
+
+@media(max-width: 480px) {
+    .loading-img {
+        width: auto;
+        max-width: 250px;
+    }
+}
